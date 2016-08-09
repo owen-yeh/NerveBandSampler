@@ -5,14 +5,35 @@ var wsClient = require('ws');						//websocket client
 
 
 //open websocket, this may take a while, point the websocket to the correct docker ip and port
+
+
 var wssClient = new wsClient('ws://192.168.99.101:8889/');
 
+wssClient.on('message', function(message) {
+	var controller = JSON.parse(message);
+	console.log("server msg " + message);
+	
+	if(controller.command == "start"){
+		
+		idd = setInterval( function(){
+			wssClient.send(JSON.stringify({"output":1,"input":[500]}));
+		}, 10);
+		
+	} else if(controller.command == "stop"){
+		clearInterval(idd);
+	}
+		
+	
+	//tock = parseInt(message);
+    //console.log('received: %s', message);
+});
 
+/*
 var SerialPort = require("serialport").SerialPort;	
 var serialport = null;			 					//used to create serial read session
 
 
-/*
+
 	//HOW TO CONTROL THE CONTROLLER TO STORE RAW DATA
 	
 	e.g. wssClient.send(JSON.stringify({"command": "store", "output":0, "input":[500,22,333], "signalGroupID": 23232312}));
@@ -46,8 +67,32 @@ wssClient.on('open', function() {
     wssClient.send(JSON.stringify({"command": "store", "output":0, "input":[500,22,333], "signalGroupID": 23232312}));
 });
 
-*/
 
+wssClient.on('message', function(message) {
+	var controller = JSON.parse(message);
+	console.log("server msg " + message);
+	
+	if(controller.command == "start"){
+		
+		idd = setInterval( function(){
+			wssClient.send(JSON.stringify({"output":1,"input":[500]}));
+		}, 1000);
+		
+	} else if(controller.command == "stop"){
+		clearInterval(idd);
+	}
+		
+	
+	//tock = parseInt(message);
+    //console.log('received: %s', message);
+});
+
+wssClient.on('close', function(message) {
+	clearInterval(idd);
+		
+	//tock = parseInt(message);
+    //console.log('received: %s', message);
+});
 
 //fred's variable sample
 var buf = [];
@@ -56,7 +101,7 @@ var arraySample=[];
 var tempData=[0,0];
 var  idd = 0;
 
-
+/*
 
 //master fred's code
 serialport = new SerialPort(systemSerialPort,{baudRate: 115200});
@@ -165,6 +210,25 @@ wssClient.on('close', function(message) {
 });
 
 //wssClient.send(JSON.stringify({"output":absTick,"input":channelVal}));
+
+
+
+
+wssClient.on('error', function(message) {
+	console.log("hoho3" + message);
+	if(wssClient){
+		console.log(wssClient.OPEN + "hoho84" + wssClient.readyState);
+	} else {
+		console.log("hoho44447");
+	}
+});
+
+if(wssClient){
+	console.log(wssClient.OPEN + "hoho" + wssClient.readyState);
+} else {
+	console.log("hoho4444");
+}
+wssClient.close();
 */
 
 
@@ -176,6 +240,7 @@ wssClient.on('close', function(message) {
 /*
 
 //decode signal from arduino master fred sex
+		
 		
 */
 
