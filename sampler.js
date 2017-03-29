@@ -63,13 +63,16 @@ WSConn.serialport.on('data', function(data){
 		flushFlag = 1;
 	
 });
-
+qwe = 1;
 
 WSConn.serialport.on('open', function(){
 	
 	processDataID = setInterval( function(){
 		//console.log(head + ' ' + tail + ' ' + " hoho22233 ");
-		if (buffer[head] == 1){
+		WSConn.store([qwe,qwe,qwe,qwe,qwe]);
+		qwe += 1;
+		qwe %= 1024;
+		/*if (buffer[head] == 1){
 			if(checkTail(head, tail, EMG_CHANNEL_NUM*2 + 2)) {
 				
 				var EMGs = new Array(EMG_CHANNEL_NUM);
@@ -94,7 +97,7 @@ WSConn.serialport.on('open', function(){
 					head = (head + EMG_CHANNEL_NUM*2 + 2) % BUFFER_SIZE; 
 					//console.log(head + ' ' + tail + ' ' + " hoho33 ");
 					//console.log("real value " + EMGs);
-					WSConn.store([EMGs[0]]);
+					WSConn.store([EMGs[0]]);//[0]EMGs ,EMGs[1],EMGs[2],EMGs[2]
 				}
 				
 				if(flushFlag) {

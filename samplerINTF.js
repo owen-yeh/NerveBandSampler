@@ -4,6 +4,7 @@ var SerialPort = require("serialport").SerialPort;	//serial port connection
 module.exports = function (settings){
 	
 	var tempInput = [];
+	var tempACC = [];
 	var idd= null;
 	var counter = 0;
 	
@@ -32,15 +33,30 @@ module.exports = function (settings){
 			
 			flushTempInput();
 			idd = setInterval( function(){
-				var time = new Date().getTime();
+				
 				if(tempInput.length == 0) {
-					
-					console.log('Error! No input to send.');
+					console.log('Error! No EMG input to send.');
 				} else {
-					
-					wssClient.send(JSON.stringify({"input":tempInput.shift(), "timestamp": time})); 
-					flushTempInput();
+					data = tempInput.shift()
+					wssClient.send(JSON.stringify({"name": "EMG","input":data[0], "timestamp": data[1]})); 
+					if(tempInput.length == settings.controllerSendPipe){
+						flushTempInput();
+					}
 				}
+				
+				if(settings.sendAccelerometerData) {
+					if(tempACC.length == 0) {
+						console.log('Error! No accelerometer input to send.');
+					} else {
+						data = tempAcc.shift()
+						wssClient.send(JSON.stringify({"name": "ACC","input":data[0], "timestamp": data[1]}));
+						
+						if(tempACC.length == settings.controllerSendPipe){
+							flushTempAcc();
+						}
+					}
+				}
+				
 			}, settings.controllerSendPeriod);
 			
 		} else if(controller.command == "stop"){
@@ -87,16 +103,25 @@ module.exports = function (settings){
 	module.wsSend = wssClient.send;
 	
 	module.store = function(inputValue){
-		
-		if (tempInput.length < 10){
-			tempInput.push(inputValue);
+		var time = new Date().getTime();
+		if (tempInput.length < settings.controllerSendPipe){
+			tempInput.push([inputValue,time]);
+		}
+	};
+	
+	module.storeAcc = function(inputValue){
+		var time = new Date().getTime();
+		if (tempAcc.length < settings.controllerSendPipe){
+			tempAcc.push([inputValue,time]);
 		}
 	};
 	
 	function flushTempInput(){
-		while(tempInput.length > 0) {
-			tempInput.pop();
-		}
+		tempInput = [];
+	};
+	
+	function flushTempAcc(){
+		tempACC = [];
 	};
 	
 	return module;
