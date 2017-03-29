@@ -5,7 +5,7 @@
 	"serialReadPeriod": 1,
 	"serialBaudRate": 9600,
 	
-	"sendAccelerometerData": false,
+	"sendAccelerometerData": true,
 	"controllerIP": "127.0.0.1",
 	"SamplerWebsocketPort": 8889,
 	"controllerSendPeriod": 4,

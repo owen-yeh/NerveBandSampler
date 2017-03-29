@@ -4,7 +4,7 @@ var SerialPort = require("serialport").SerialPort;	//serial port connection
 module.exports = function (settings){
 	
 	var tempInput = [];
-	var tempACC = [];
+	var tempAcc = [];
 	var idd= null;
 	var counter = 0;
 	
@@ -45,13 +45,13 @@ module.exports = function (settings){
 				}
 				
 				if(settings.sendAccelerometerData) {
-					if(tempACC.length == 0) {
+					if(tempAcc.length == 0) {
 						console.log('Error! No accelerometer input to send.');
 					} else {
 						data = tempAcc.shift()
 						wssClient.send(JSON.stringify({"name": "ACC","input":data[0], "timestamp": data[1]}));
 						
-						if(tempACC.length == settings.controllerSendPipe){
+						if(tempAcc.length == settings.controllerSendPipe){
 							flushTempAcc();
 						}
 					}
@@ -121,7 +121,7 @@ module.exports = function (settings){
 	};
 	
 	function flushTempAcc(){
-		tempACC = [];
+		tempAcc = [];
 	};
 	
 	return module;
