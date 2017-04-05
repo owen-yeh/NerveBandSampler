@@ -8,7 +8,7 @@
 	"sendAccelerometerData": true,
 	"controllerIP": "127.0.0.1",
 	"SamplerWebsocketPort": 8889,
-	"controllerSendPeriod": 4,
+	"controllerSendPeriod": 2,
 	"controllerSendPipe": 10,
 	
 	"TLCIP": "127.0.0.1",

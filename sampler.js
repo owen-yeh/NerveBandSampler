@@ -69,8 +69,8 @@ WSConn.serialport.on('open', function(){
 	
 	processDataID = setInterval( function(){
 		//console.log(head + ' ' + tail + ' ' + " hoho22233 ");
-		WSConn.store([qwe]);
-		WSConn.storeAcc([qwe]);
+		WSConn.store([qwe,qwe,qwe,qwe,qwe]);
+		WSConn.storeAcc([qwe,qwe,qwe,qwe,qwe]);
 		qwe += 1;
 		qwe %= 1024;
 		/*if (buffer[head] == 1){
